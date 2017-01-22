@@ -68,6 +68,7 @@
             if(player.yMotion > 0) player.yMotion -= player.resistance;
             if(player.yMotion < 0) player.yMotion += player.resistance;
 
+            if(player.position.y + player.dimensions.height < planet.dimensions.height)
             if(player.yMotion > -gravity) player.yMotion -= gravity;
 
             player.position.x -= player.xMotion;
