@@ -33,7 +33,7 @@
                 position: {x: field.dimensions.width/2, y: field.dimensions.height/2},
                 dimensions: {width: image.width, height: image.height},
                 maxSpeed: 10,
-                acceleration: 3,
+                acceleration: 5,
                 resistance: 1,
                 xMotion: 0,
                 yMotion: 0
@@ -61,17 +61,22 @@
             }
         });
 
-        // game loop
-        function loop() {
-            if(player.yMotion > -gravity) player.yMotion -= gravity; // Gravity effects
-            if(player.yMotion > 0) player.yMotion -= player.resistance; // Resistance stops accerleration
-            if(player.yMotion < 0) player.yMotion += player.resistance; // Resistance stops accerleration
+        // Motion calculation
+        function motion() {
+            if(player.xMotion > 0) player.xMotion -= player.resistance;
+            if(player.xMotion < 0) player.xMotion += player.resistance;
+            if(player.yMotion > 0) player.yMotion -= player.resistance;
+            if(player.yMotion < 0) player.yMotion += player.resistance;
 
-            if(player.xMotion > 0) player.xMotion -= player.resistance; // Resistance stops accerleration
-            if(player.xMotion < 0) player.xMotion += player.resistance; // Resistance stops accerleration
+            if(player.yMotion > -gravity) player.yMotion -= gravity;
 
             player.position.x -= player.xMotion;
             player.position.y -= player.yMotion;
+        }
+
+        // game loop
+        function loop() {
+            motion();
 
             field.canvas.clearRect(0,0,600,600);
             field.canvas.drawImage(planet.image, planet.position.x, planet.position.y);
