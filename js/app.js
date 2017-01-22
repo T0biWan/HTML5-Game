@@ -35,49 +35,43 @@
                 maxSpeed: 10,
                 acceleration: 3,
                 resistance: 1,
-                speed: 0
+                xMotion: 0,
+                yMotion: 0
             };
         })();
 
         var intervall = window.setInterval(loop, tickRate);
 
         // Event Listener für Tastendruck
-        document.addEventListener("keypress", function (event) {
+        document.addEventListener("keydown", function (event) {
             switch(event.keyCode) {
                 case keyBinding.left:
+                    if(player.xMotion < player.maxSpeed) player.xMotion += player.acceleration;
                     break;
                 case keyBinding.rigt:
+                    if(player.xMotion > -player.maxSpeed) player.xMotion -= player.acceleration;
                     break;
                 case keyBinding.down:
+                    if(player.yMotion > -player.maxSpeed) player.yMotion -= player.acceleration;
                     break;
                 case keyBinding.up:
-                    if(player.speed < player.maxSpeed) player.speed += player.acceleration;
+                    if(player.yMotion < player.maxSpeed) player.yMotion += player.acceleration;
                     break;
                 break;
             }
         });
 
-        // Schwerkraft
-        function gravityEffect() {
-            if(player.position.y < planet.dimensions.height - player.dimensions.height) {
-                player.position.y -= gravity;
-            }
-        }
-
         // game loop
         function loop() {
-            //gravityEffect();
-            //player.speed -= gravity;
-            //player.position.y -= player.speed;
-            //console.log(player.speed - gravity);
-            // if(player.speed > -gravity) player.speed -= gravity;
-            // player.position.y -= player.speed;
+            if(player.yMotion > -gravity) player.yMotion -= gravity; // Gravity effects
+            if(player.yMotion > 0) player.yMotion -= player.resistance; // Resistance stops accerleration
+            if(player.yMotion < 0) player.yMotion += player.resistance; // Resistance stops accerleration
 
+            if(player.xMotion > 0) player.xMotion -= player.resistance; // Resistance stops accerleration
+            if(player.xMotion < 0) player.xMotion += player.resistance; // Resistance stops accerleration
 
-            //if(player.speed > -gravity) player.speed -= gravity; // Gravity effects
-            if(player.speed > 0) player.speed -= player.resistance; // Resistance stops accerleration
-
-            player.position.y -= player.speed;
+            player.position.x -= player.xMotion;
+            player.position.y -= player.yMotion;
 
             field.canvas.clearRect(0,0,600,600);
             field.canvas.drawImage(planet.image, planet.position.x, planet.position.y);
