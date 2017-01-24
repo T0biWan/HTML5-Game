@@ -3,8 +3,6 @@
         // Variablen initialisieren
         var tickRate = 100;
         var keyBinding = {left: 37, rigt: 39, up: 38, down: 40};
-
-
         var pressedKeys = {37: false, 39: false, 38: false, 40: false};
 
         var keyBinding2 = {37: 'left', 39: 'right', 38: 'up', 40: 'down'};
@@ -14,8 +12,10 @@
 
 
         var keys = (function () {
-            var keyBinding = {left: 37, rigt: 39, up: 38, down: 40};
-            var pressedKeys = {};
+            return {
+                left: {key: 37, pressed: false},
+                right: {key: 39, pressed: false}
+            };
         })();
 
 
