@@ -62,22 +62,31 @@
         });
 
         // Motion calculation
-        function motion() {
+        function playerMotion() {
+
             if(player.xMotion > 0) player.xMotion -= player.resistance;
             if(player.xMotion < 0) player.xMotion += player.resistance;
             if(player.yMotion > 0) player.yMotion -= player.resistance;
             if(player.yMotion < 0) player.yMotion += player.resistance;
 
-            if(player.position.y + player.dimensions.height < planet.dimensions.height)
-            if(player.yMotion > -gravity) player.yMotion -= gravity;
+            if(playerIsAbovePlanet()) if(player.yMotion > -gravity) player.yMotion -= gravity;
 
             player.position.x -= player.xMotion;
             player.position.y -= player.yMotion;
         }
 
+        // Collision detection
+        function playerIsAbovePlanet() {
+            return player.position.y + player.dimensions.height < planet.dimensions.height;
+        }
+
+        function playerIsInsideField() {
+            return player.position.y > 0;
+        }
+
         // game loop
         function loop() {
-            motion();
+            playerMotion();
 
             field.canvas.clearRect(0,0,600,600);
             field.canvas.drawImage(planet.image, planet.position.x, planet.position.y);
@@ -85,3 +94,14 @@
         }
     }, false);
 })();
+
+// Kollisionsabfrage weiter ausbauen
+// Multiple Tastenanschläge aufnehmen
+// Ziel bauen und erkennen wenn getroffen
+// Beides direkt in CSS vereinbaren?
+// Wenn Ziel nicht getroffen wird => Crash
+// Treibstoff einbauen und anzeigen
+// Finale Grafiken aussuchen
+// Animation machen
+// Divs für verschiedene Screens bauen
+// CSS
