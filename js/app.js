@@ -64,17 +64,21 @@
 
         // Motion calculation
         function playerMotion() {
-            if(keys.pressed[keys.binding.left]) if(player.xMotion < player.maxSpeed) player.xMotion += player.acceleration;
-            if(keys.pressed[keys.binding.right]) if(player.xMotion > -player.maxSpeed) player.xMotion -= player.acceleration;
-            if(keys.pressed[keys.binding.down]) if(player.yMotion > -player.maxSpeed) player.yMotion -= player.acceleration;
-            if(keys.pressed[keys.binding.up]) if(player.yMotion < player.maxSpeed) player.yMotion += player.acceleration;
+            if(keys.pressed[keys.binding.left] && player.xMotion < player.maxSpeed) player.xMotion += player.acceleration;
+            if(keys.pressed[keys.binding.right] && player.xMotion > -player.maxSpeed) player.xMotion -= player.acceleration;
+            if(keys.pressed[keys.binding.down] && player.yMotion > -player.maxSpeed) player.yMotion -= player.acceleration;
+            if(keys.pressed[keys.binding.up] && player.yMotion < player.maxSpeed) player.yMotion += player.acceleration;
 
             if(player.xMotion > 0) player.xMotion -= player.resistance;
             if(player.xMotion < 0) player.xMotion += player.resistance;
             if(player.yMotion > 0) player.yMotion -= player.resistance;
             if(player.yMotion < 0) player.yMotion += player.resistance;
 
-            if(playerIsAbovePlanet()) if(player.yMotion > -gravity) player.yMotion -= gravity;
+            if(playerIsAbovePlanet() && player.yMotion > -gravity) player.yMotion -= gravity;
+
+            teleportPlayerFromSideToSide();
+            if(playerCollidesUp()) player.position.y = 0;
+            if(playerCollidesDown()) player.position.y = field.dimensions.height - player.dimensions.height;
 
             player.position.x -= player.xMotion;
             player.position.y -= player.yMotion;
@@ -86,7 +90,28 @@
         }
 
         function playerIsInsideField() {
-            return player.position.y > 0;
+            return player.position.y > 0 && player.position.y + player.dimensions.height < field.dimensions.height;
+        }
+
+        function teleportPlayerFromSideToSide() {
+            if(playerCollidesLeft()) player.position.x = field.dimensions.width - player.dimensions.width;
+            if(playerCollidesRight()) player.position.x = 0;
+        }
+
+        function playerCollidesLeft() {
+            return player.position.x  < 0;
+        }
+
+        function playerCollidesRight() {
+            return player.position.x + player.dimensions.width > field.dimensions.width;
+        }
+
+        function playerCollidesUp() {
+            return player.position.y < 0
+        }
+
+        function playerCollidesDown() {
+            return player.position.y + player.dimensions.height > field.dimensions.height;
         }
 
         // game loop
@@ -100,13 +125,14 @@
     }, false);
 })();
 
-// Kollisionsabfrage weiter ausbauen
-// Multiple Tastenanschläge aufnehmen
-// Keys geschickt auslagern
+// Kollisionsabfrage verbessern (oben & unten)
+// Telleport smoother machen
 // Ziel bauen und erkennen wenn getroffen
 // Beides direkt in CSS vereinbaren?
 // Wenn Ziel nicht getroffen wird => Crash
 // Treibstoff einbauen und anzeigen
+// playerMotion refactorn
+// Allesrefactorn
 // Finale Grafiken aussuchen
 // Animation machen
 // Divs für verschiedene Screens bauen
