@@ -3,6 +3,23 @@
         // Variablen initialisieren
         var tickRate = 100;
         var keyBinding = {left: 37, rigt: 39, up: 38, down: 40};
+
+
+        var pressedKeys = {37: false, 39: false, 38: false, 40: false};
+
+        var keyBinding2 = {37: 'left', 39: 'right', 38: 'up', 40: 'down'};
+        var keys = (function() {
+            var keyBinding = {left: 37, rigt: 39, up: 38, down: 40};
+        })();
+
+
+        var keys = (function () {
+            var keyBinding = {left: 37, rigt: 39, up: 38, down: 40};
+            var pressedKeys = {};
+        })();
+
+
+
         var gravity = 1;
         var field = (function () {
             var image = new Image();
@@ -23,7 +40,6 @@
                 dimensions: {width: image.width, height: image.height}
             };
         })();
-
         var player = (function () {
             var image = new Image();
             image.src = "media/images/player.png";
@@ -39,27 +55,51 @@
                 yMotion: 0
             };
         })();
-
         var intervall = window.setInterval(loop, tickRate);
 
         // Event Listener für Tastendruck
         document.addEventListener("keydown", function (event) {
-            switch(event.keyCode) {
-                case keyBinding.left:
-                    if(player.xMotion < player.maxSpeed) player.xMotion += player.acceleration;
-                    break;
-                case keyBinding.rigt:
-                    if(player.xMotion > -player.maxSpeed) player.xMotion -= player.acceleration;
-                    break;
-                case keyBinding.down:
-                    if(player.yMotion > -player.maxSpeed) player.yMotion -= player.acceleration;
-                    break;
-                case keyBinding.up:
-                    if(player.yMotion < player.maxSpeed) player.yMotion += player.acceleration;
-                    break;
-                break;
-            }
+            // switch(event.keyCode) {
+            //     case keyBinding.left:
+            //         if(player.xMotion < player.maxSpeed) player.xMotion += player.acceleration;
+            //         break;
+            //     case keyBinding.rigt:
+            //         if(player.xMotion > -player.maxSpeed) player.xMotion -= player.acceleration;
+            //         break;
+            //     case keyBinding.down:
+            //         if(player.yMotion > -player.maxSpeed) player.yMotion -= player.acceleration;
+            //         break;
+            //     case keyBinding.up:
+            //         if(player.yMotion < player.maxSpeed) player.yMotion += player.acceleration;
+            //         break;
+            //     break;
+            // }
+
+            // Ist KeyCode enthalten?
+            // if(!arrayContainsElement(pressedKeys, event.keyCode).contains) {
+            //     pressedKeys.push(event.keyCode);
+            // }
+            if(event.keyCode in pressedKeys) pressedKeys[event.keyCode] = true;
+            console.log(pressedKeys);
         });
+
+        document.addEventListener("keyup", function (event) {
+            // var fuck = arrayContainsElement(pressedKeys, event.keyCode);
+            // if(fuck.contains) {
+            //     delete pressedKeys[fuck.index];
+            // }
+            // console.log(keyBinding);
+            if(event.keyCode in pressedKeys) pressedKeys[event.keyCode] = false;
+            console.log(pressedKeys);
+        });
+
+
+        function arrayContainsElement (array, element) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] === element) return {contains: true, index: i};
+            }
+            return {contains: false, index: null}; //ausgeben lassen
+        }
 
         // Motion calculation
         function playerMotion() {
@@ -97,6 +137,7 @@
 
 // Kollisionsabfrage weiter ausbauen
 // Multiple Tastenanschläge aufnehmen
+// Keys geschickt auslagern
 // Ziel bauen und erkennen wenn getroffen
 // Beides direkt in CSS vereinbaren?
 // Wenn Ziel nicht getroffen wird => Crash
