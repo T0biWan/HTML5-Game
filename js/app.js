@@ -2,23 +2,21 @@
     window.addEventListener("load", function() {
         // Variablen initialisieren
         var tickRate = 100;
-        var keyBinding = {left: 37, rigt: 39, up: 38, down: 40};
-        var pressedKeys = {37: false, 39: false, 38: false, 40: false};
 
-        var keyBinding2 = {37: 'left', 39: 'right', 38: 'up', 40: 'down'};
         var keys = (function() {
-            var keyBinding = {left: 37, rigt: 39, up: 38, down: 40};
-        })();
+            var binding = {left: 37, rigt: 39, up: 38, down: 40};
+            var pressed = {};
 
+            var codes = Object.values(binding);
+            for (var i = 0; i < codes.length; i++) {
+                pressed[codes[i]] = false;
+            }
 
-        var keys = (function () {
             return {
-                left: {key: 37, pressed: false},
-                right: {key: 39, pressed: false}
+                binding: binding,
+                pressed: pressed
             };
         })();
-
-
 
         var gravity = 1;
         var field = (function () {
@@ -79,8 +77,7 @@
             // if(!arrayContainsElement(pressedKeys, event.keyCode).contains) {
             //     pressedKeys.push(event.keyCode);
             // }
-            if(event.keyCode in pressedKeys) pressedKeys[event.keyCode] = true;
-            console.log(pressedKeys);
+            if(event.keyCode in keys.pressed) keys.pressed[event.keyCode] = true;
         });
 
         document.addEventListener("keyup", function (event) {
@@ -89,17 +86,8 @@
             //     delete pressedKeys[fuck.index];
             // }
             // console.log(keyBinding);
-            if(event.keyCode in pressedKeys) pressedKeys[event.keyCode] = false;
-            console.log(pressedKeys);
+            if(event.keyCode in keys.pressed) keys.pressed[event.keyCode] = false;
         });
-
-
-        function arrayContainsElement (array, element) {
-            for (var i = 0; i < array.length; i++) {
-                if (array[i] === element) return {contains: true, index: i};
-            }
-            return {contains: false, index: null}; //ausgeben lassen
-        }
 
         // Motion calculation
         function playerMotion() {
