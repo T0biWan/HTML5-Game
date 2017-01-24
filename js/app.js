@@ -2,9 +2,9 @@
     window.addEventListener("load", function() {
         // Variablen initialisieren
         var tickRate = 100;
-
+        var gravity = 1;
         var keys = (function() {
-            var binding = {left: 37, rigt: 39, up: 38, down: 40};
+            var binding = {left: 37, right: 39, up: 38, down: 40};
             var pressed = {};
 
             var codes = Object.values(binding);
@@ -17,8 +17,6 @@
                 pressed: pressed
             };
         })();
-
-        var gravity = 1;
         var field = (function () {
             var image = new Image();
             image.src = "media/images/background.png";
@@ -57,40 +55,19 @@
 
         // Event Listener für Tastendruck
         document.addEventListener("keydown", function (event) {
-            // switch(event.keyCode) {
-            //     case keyBinding.left:
-            //         if(player.xMotion < player.maxSpeed) player.xMotion += player.acceleration;
-            //         break;
-            //     case keyBinding.rigt:
-            //         if(player.xMotion > -player.maxSpeed) player.xMotion -= player.acceleration;
-            //         break;
-            //     case keyBinding.down:
-            //         if(player.yMotion > -player.maxSpeed) player.yMotion -= player.acceleration;
-            //         break;
-            //     case keyBinding.up:
-            //         if(player.yMotion < player.maxSpeed) player.yMotion += player.acceleration;
-            //         break;
-            //     break;
-            // }
-
-            // Ist KeyCode enthalten?
-            // if(!arrayContainsElement(pressedKeys, event.keyCode).contains) {
-            //     pressedKeys.push(event.keyCode);
-            // }
             if(event.keyCode in keys.pressed) keys.pressed[event.keyCode] = true;
         });
 
         document.addEventListener("keyup", function (event) {
-            // var fuck = arrayContainsElement(pressedKeys, event.keyCode);
-            // if(fuck.contains) {
-            //     delete pressedKeys[fuck.index];
-            // }
-            // console.log(keyBinding);
             if(event.keyCode in keys.pressed) keys.pressed[event.keyCode] = false;
         });
 
         // Motion calculation
         function playerMotion() {
+            if(keys.pressed[keys.binding.left]) if(player.xMotion < player.maxSpeed) player.xMotion += player.acceleration;
+            if(keys.pressed[keys.binding.right]) if(player.xMotion > -player.maxSpeed) player.xMotion -= player.acceleration;
+            if(keys.pressed[keys.binding.down]) if(player.yMotion > -player.maxSpeed) player.yMotion -= player.acceleration;
+            if(keys.pressed[keys.binding.up]) if(player.yMotion < player.maxSpeed) player.yMotion += player.acceleration;
 
             if(player.xMotion > 0) player.xMotion -= player.resistance;
             if(player.xMotion < 0) player.xMotion += player.resistance;
